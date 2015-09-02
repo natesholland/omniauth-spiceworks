@@ -5,8 +5,7 @@ module OmniAuth
 
       option :name, 'spiceworks'
       option :client_options, {
-        #site: 'https://accounts.spiceworks.com'
-        site: 'http://localhost:3010'
+        site: 'https://accounts.spiceworks.com'
       }
       uid{raw_info['spiceworks_id']}
       info do
@@ -25,8 +24,7 @@ module OmniAuth
 
       private
       def raw_info
-        #@raw_info ||= access_token.get('http://www.account.spiceworks.com/api/public/v1/users/user')
-        @raw_info ||= access_token.get('http://localhost:3010/api/public/v1/users/user').parsed['user'] || {}
+        @raw_info ||= access_token.get('http://www.account.spiceworks.com/api/public/v1/users/user').parsed['user'] || {}
       end
 
     end
