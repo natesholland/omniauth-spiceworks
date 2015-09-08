@@ -2,8 +2,9 @@ require 'omniauth/strategies/oauth2'
 module OmniAuth
   module Strategies
     class Spiceworks < OmniAuth::Strategies::OAuth2
-
+      DEFAULT_SCOPE = 'default'
       option :name, 'spiceworks'
+      option :authorize_options, [:scope]
       option :client_options, {
         site: 'https://accounts.spiceworks.com'
       }
@@ -20,6 +21,16 @@ module OmniAuth
         {
           'raw_info' => raw_info
         }
+      end
+
+      def authorize_params
+        puts "***SESSION #{@env}"
+        puts "***SESSION #{session}"
+        puts "***SUPER #{super}"
+        super.tap do |params|
+          puts "***PARAMS #{params}"
+          params[:scope] ||= DEFAULT_SCOPE
+        end
       end
 
       private

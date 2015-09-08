@@ -3,13 +3,27 @@ require 'omniauth-spiceworks'
 
 describe OmniAuth::Strategies::Spiceworks do
   let(:request) { double('Request', :params => {}, :cookies => {}, :env => {}) }
+  let(:app) {
+    lambda do
+      [200, {}, ["Hello."]]
+    end
+  }
   subject do
-    OmniAuth::Strategies::Spiceworks.new([200, {}, ["Hi"]], 'appid', 'secret', @options || {}).tap do |strategy|
+    OmniAuth::Strategies::Spiceworks.new(app, 'appid', 'secret', @options || {}).tap do |strategy|
       allow(strategy).to receive(:request) {
         request
       }
     end
   end
+
+  describe '#authorize_params' do
+    it 'has default scope' do
+      @options = {scope: 'email'}
+      puts "***SUBJECT #{subject.authorize_params}"
+      expect(subject.authorize_params[:scope]).to eq 'default'
+    end
+  end
+
   describe '#client_options' do
     it 'has correct site' do
       expect(subject.client.site).to eq('https://accounts.spiceworks.com')
